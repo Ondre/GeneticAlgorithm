@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Population {
     private List<Species> generation;
+    private List<Species> matingPool;
     private static String target;
     private static int populationSize;
     private static int generations = 0;
@@ -20,10 +21,44 @@ public class Population {
         Population.mutationRate = mutationRate;
         Population.populationSize = populationSize;
 
+        matingPool = new ArrayList<>();
         generation = new ArrayList<>();
         for (int i = 0; i < Population.populationSize; i++) {
             generation.add(new Species(Population.target.length()));
         }
+        this.countFitness();
+        this.sortByFitness();
+    }
+
+    public void collectMatingPool(){
+        matingPool.clear();
+
+        for (int i = 0; i < generation.size(); i++) {
+            int nnnn = (int) (generation.get(i).getRawFitness() * 100);
+            for (int j = 0; j < nnnn; j++) {
+                matingPool.add(generation.get(i));
+            }
+        }
+        if (matingPool.isEmpty()) {
+            matingPool.addAll(generation);
+        }
+    }
+
+    public void computeNextGeneration(){
+        generations++;
+        this.collectMatingPool();
+
+        for (int i = 0; i < generation.size(); i++) {
+            int a = (int)(Math.random() * matingPool.size());
+            int b = (int)(Math.random() * matingPool.size());
+            Species partnerA = matingPool.get(a);
+            Species partnerB = matingPool.get(b);
+            Species child = partnerA.crossover(partnerB);
+            child.mutate(mutationRate);
+            generation.set(i, child);
+        }
+        this.countFitness();
+        this.sortByFitness();
     }
 
     public static double getMutationRate() {
@@ -52,13 +87,26 @@ public class Population {
     public void printBest(int num) {
         String stringTarget = "Target | ";
 
-        System.out.format("%s%" + target.length() + "s\n", stringTarget, target);
+        System.out.format("\n%s%" + target.length() + "s\n", stringTarget, target);
         for (int i = 0; i < target.length() + stringTarget.length(); i++) { System.out.print("-"); } System.out.println();
 
-        for (int i = 0; i < (num < generation.size() ?  num : generation.size()); i++) {
+        printBestNoHeader(num);
+
+    }
+
+    public String getBest(){
+        return String.valueOf(generation.get(0).getDnaString());
+    }
+
+    public void printGeneration() {
+        System.out.println("Generation: " + generations);
+    }
+
+    public void printBestNoHeader(int num) {
+        for (int i = 0; i < (num < generation.size() ? num: generation.size()); i++) {
             System.out.format("%5d%% | %" + target.length() + "s \n",
                     generation.get(i).getRoundFitness(),
-                    String.valueOf(generation.get(i).getDna()));
+                    generation.get(i).getDnaString());
         }
     }
 }

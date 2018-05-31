@@ -4,17 +4,17 @@ public class Species {
     private char[] dna;
     private double fitness = 0;
 
-    private static char[] symbolPool;
+    public static char[] symbolPool;
 
     static {
-        symbolPool = new char[99];
+        symbolPool = new char[161];
         for (int i = 0; i < 64; i++) {
             symbolPool[i] = (char) ('А' + i);
         }
         symbolPool[64] = 'ё';
         symbolPool[65] = 'Ё';
         symbolPool[66] = ' ';
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < 94; i++) {
             symbolPool[67 + i] = (char) ((int)'!' + i);
         }
     }
@@ -23,7 +23,7 @@ public class Species {
         return dna;
     }
 
-    public String getDnaAsString() {
+    public String getDnaString() {
         return String.valueOf(dna);
     }
 
@@ -48,6 +48,7 @@ public class Species {
             if (dna[i] == target.charAt(i)) fitness++;
         }
         fitness = fitness / target.length();
+        fitness = fitness * fitness;
     }
 
     // Crossover
