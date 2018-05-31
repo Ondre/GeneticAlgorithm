@@ -15,9 +15,6 @@ public class Main {
             p.printBestNoHeader(1);
             p.computeNextGeneration();
         }
-
-        p.printBest(20);
-        p.printGeneration();
-
+        p.printBestNoHeader(1);
     }
 }

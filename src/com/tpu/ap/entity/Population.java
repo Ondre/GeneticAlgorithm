@@ -104,7 +104,8 @@ public class Population {
 
     public void printBestNoHeader(int num) {
         for (int i = 0; i < (num < generation.size() ? num: generation.size()); i++) {
-            System.out.format("%5d%% | %" + target.length() + "s \n",
+            System.out.format("%4d%5d%% | %" + target.length() + "s \n",
+                    generations,
                     generation.get(i).getRoundFitness(),
                     generation.get(i).getDnaString());
         }
