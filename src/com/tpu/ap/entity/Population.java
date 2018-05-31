@@ -45,18 +45,20 @@ public class Population {
     }
 
     public void printAll() {
-        System.out.println("Target: " + target);
-        for (Species species : generation) {
-            System.out.println("Fitness: " + species.getRoundFitness() + "% : " + String.valueOf(species.getDna()));
-        }
+        this.printBest(populationSize);
     }
 
-    public void printBest(int num) {
-        System.out.println("Target: " + target);
-        for (int i = 0; i < (num < generation.size() ?  num : generation.size()); i++) {
-            System.out.println("Fitness: " + generation.get(i).getRoundFitness() + "% : "
-                                    + String.valueOf(generation.get(i).getDna()));
 
+    public void printBest(int num) {
+        String stringTarget = "Target | ";
+
+        System.out.format("%s%" + target.length() + "s\n", stringTarget, target);
+        for (int i = 0; i < target.length() + stringTarget.length(); i++) { System.out.print("-"); } System.out.println();
+
+        for (int i = 0; i < (num < generation.size() ?  num : generation.size()); i++) {
+            System.out.format("%5d%% | %" + target.length() + "s \n",
+                    generation.get(i).getRoundFitness(),
+                    String.valueOf(generation.get(i).getDna()));
         }
     }
 }
